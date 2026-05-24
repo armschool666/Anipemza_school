@@ -21,15 +21,11 @@ export default async function SectionPage({
     notFound();
   }
 
-  const noImage = section.slug === "about";
-
   return (
     <SiteShell>
-      <section className={noImage ? "subhero subhero--compact" : "subhero"}>
-        {!noImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={section.image} alt={section.title} loading="lazy" />
-        )}
+      <section className="subhero">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={section.image} alt={section.title} loading="lazy" />
         <div>
           <Link href="/">{t("section.homeLink")}</Link>
           <h1>{section.title}</h1>

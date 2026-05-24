@@ -46,34 +46,34 @@ export interface SchoolConfig {
 }
 
 export const schoolConfig: SchoolConfig = {
-  domain: "hatsikschool.am",
-  email: "info@hatsikschool.am",
+  domain: "anipemzaschool.am",
+  email: "anipemza2010@mail.ru",
   phone: {
-    display: "+374 93 26-71-26",
-    tel: "+37493267126",
+    display: "+374 93 93-30-65",
+    tel: "+37493933065",
   },
   social: {
-    facebook: "https://www.facebook.com/hatsikvil1966",
+    facebook: "https://www.facebook.com/anipemzayimijnakargdproc/",
     youtube: "",
   },
   map: {
-    lat: 40.8472,
-    lon: 43.8741,
+    lat: 40.442141, 
+    lon: 43.599868,
     bboxRadius: 0.02,
   },
   assets: {
-    logo: "/logo.jpg",
+    logo: "/logo.png",
     heroImage: "/school.jpg",
   },
   name: {
-    hy: "Հացիկի միջնակարգ դպրոց",
-    ru: "Средняя школа села Ацик",
-    en: "Hatsik Secondary School",
+    hy: "Անիպեմզաի միջնակարգ դպրոց",
+    ru: "Средняя школа Анипемза",
+    en: "Anipemza Secondary School",
   },
   shortName: {
-    hy: "Հացիկ",
-    ru: "Ацик",
-    en: "Hatsik",
+    hy: "Անիպեմզա",
+    ru: "Анипемза",
+    en: "Anipemza",
   },
   tagline: {
     hy: "Պաշտոնական տեղեկատվական հարթակ",
@@ -81,9 +81,9 @@ export const schoolConfig: SchoolConfig = {
     en: "Official information portal",
   },
   address: {
-    hy: "ՀՀ Շիրակի մարզ, Հացիկ գյուղ, N13 փողոց, փակուղի 1, շենք 3",
-    ru: "РА, Ширакская область, село Ацик, ул. N13, тупик 1, дом 3",
-    en: "Shirak Region, Hatsik village, N13 St., dead-end 1, building 3, Armenia",
+    hy: "ՀՀ Շիրակի մարզ, գ. Անիպեմզա, փ․1, նրբ․1, շ․6",
+    ru: "РА Ширакская область, село Анипемза, ул. 1, дом 1, корпус 6",
+    en: "RA Shirak region, village Anipemza, st. 1, no. 1, building 6",
   },
   region: {
     hy: "Շիրակի մարզ",

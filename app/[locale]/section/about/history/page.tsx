@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import { Link } from "../../../../../i18n/navigation";
 import { SiteShell } from "../../../../components";
 import { sections } from "../../../../data";

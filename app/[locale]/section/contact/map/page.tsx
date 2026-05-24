@@ -1,5 +1,15 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function MapRedirectPage() {
-  redirect("/section/contact#map");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const locale = pathname.split("/")[1];
+    window.location.replace(`/${locale}/section/contact#map`);
+  }, [pathname]);
+
+  return null;
 }

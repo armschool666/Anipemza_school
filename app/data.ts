@@ -25,8 +25,7 @@ export const sections: Section[] = [
     title: "Դպրոցի մասին",
     description:
       "Դպրոցի պատմություն, հայտարարություններ, ընդունելության կարգ, թափուր աշխատատեղեր և հաշվետվությունների միասնական արխիվ։",
-    image:
-      "https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=1200&q=80",
+    image: "/school2.jpg",
     links: [
       {
         slug: "history",
@@ -115,8 +114,7 @@ export const sections: Section[] = [
     title: "Անձնակազմ",
     description:
       "Տնօրինություն, ուսուցչական կազմ, մասնագիտական փորձ, որակավորում և գիտական գործունեություն։",
-    image:
-      "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80",
+    image: "/dasatuner.jpg",
     links: [
       {
         slug: "leadership",
@@ -145,8 +143,7 @@ export const sections: Section[] = [
     title: "Շենք և ռեսուրսներ",
     description:
       "Դասասենյակներ, լաբորատորիաներ, համակարգչային սենյակ, մարզադահլիճ, բուժկետ և ճաշարան։",
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+    image: "/naxaktraran.jpg",
     links: [
       {
         slug: "classrooms",
