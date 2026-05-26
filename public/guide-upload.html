@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ուղեցույց | Руководство — Կայքի Կառավարում / Управление сайтом</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #222;
+      background: #f4f6fb;
+    }
+
+    /* ===== COVER HEADER ===== */
+    .cover {
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563eb 55%, #1e90c4 100%);
+      color: #fff;
+      padding: 60px 24px 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 4px 18px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .cover h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .cover h1 .hy { display: block; }
+    .cover h1 .ru { display: block; font-size: 1.6rem; opacity: 0.88; font-weight: 600; }
+    .cover-sub {
+      font-size: 1.05rem;
+      opacity: 0.82;
+      margin-top: 14px;
+    }
+    .cover-meta {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      opacity: 0.75;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ===== TABLE OF CONTENTS ===== */
+    .toc {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 32px 36px;
+      margin: 36px auto;
+      max-width: 980px;
+    }
+    .toc h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a3a6b;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #e8edf5;
+      padding-bottom: 8px;
+    }
+    .toc ol {
+      columns: 2;
+      column-gap: 32px;
+      padding-left: 20px;
+    }
+    .toc li {
+      margin-bottom: 8px;
+      break-inside: avoid;
+    }
+    .toc a {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ===== SECTION ===== */
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 36px 36px 30px;
+      margin: 28px auto;
+      max-width: 980px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+      border-bottom: 2px solid #e8edf5;
+      padding-bottom: 16px;
+    }
+    .section-num {
+      background: linear-gradient(135deg, #2563eb, #1a3a6b);
+      color: #fff;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(37,99,235,0.3);
+    }
+    .section-title { flex: 1; }
+    .section-title .hy {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a3a6b;
+      display: block;
+    }
+    .section-title .ru {
+      font-size: 1rem;
+      color: #888;
+      font-weight: 400;
+      display: block;
+    }
+
+    /* ===== BILINGUAL COLUMNS ===== */
+    .bilingual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .lang-hy {
+      background: #f0f5ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+    }
+    .lang-ru {
+      background: #fff5f5;
+      border-left: 4px solid #dc2626;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+    }
+    .lang-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      opacity: 0.6;
+    }
+    .lang-hy .lang-label { color: #2563eb; }
+    .lang-ru .lang-label { color: #dc2626; }
+
+    /* ===== STEPS ===== */
+    .steps { list-style: none; padding: 0; margin: 0; }
+    .step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 22px;
+      align-items: flex-start;
+    }
+    .step-num {
+      background: linear-gradient(135deg, #2563eb, #1e90c4);
+      color: #fff;
+      min-width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+    }
+    .step-body { flex: 1; padding-top: 4px; }
+    .step-body strong { color: #1a3a6b; }
+
+    /* ===== CALLOUT BOXES ===== */
+    .callout {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 18px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .callout-body { flex: 1; }
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .callout.info { background: #eff6ff; border-left: 4px solid #3b82f6; }
+    .callout.info .callout-title { color: #1d4ed8; }
+    .callout.warning { background: #fffbeb; border-left: 4px solid #f59e0b; }
+    .callout.warning .callout-title { color: #b45309; }
+    .callout.success { background: #f0fdf4; border-left: 4px solid #22c55e; }
+    .callout.success .callout-title { color: #15803d; }
+    .callout.danger { background: #fff1f2; border-left: 4px solid #f43f5e; }
+    .callout.danger .callout-title { color: #be123c; }
+
+    /* ===== BROWSER MOCKUP ===== */
+    .mockup {
+      background: #f8fafc;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 22px 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .mockup-bar {
+      background: #e5e7eb;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mockup-dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .mockup-dot.red { background: #f87171; }
+    .mockup-dot.yellow { background: #fbbf24; }
+    .mockup-dot.green { background: #4ade80; }
+    .mockup-url {
+      background: #fff;
+      border-radius: 4px;
+      padding: 2px 12px;
+      font-size: 12px;
+      color: #555;
+      flex: 1;
+      border: 1px solid #d1d5db;
+    }
+    .mockup-body {
+      padding: 22px 24px;
+    }
+    .form-row {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    .form-label .req { color: #dc2626; }
+    .form-input {
+      width: 100%;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #6b7280;
+      background: #fff;
+    }
+    .form-input.focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+    .form-select {
+      width: 100%;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #374151;
+      background: #fff;
+    }
+    .form-textarea {
+      width: 100%;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #6b7280;
+      background: #fff;
+      height: 80px;
+      resize: none;
+    }
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .dropzone {
+      border: 2px dashed #93c5fd;
+      border-radius: 8px;
+      background: #eff6ff;
+      padding: 24px;
+      text-align: center;
+      color: #2563eb;
+      font-size: 13px;
+    }
+    .dropzone .dz-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1a3a6b);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(37,99,235,0.3);
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .link-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #374151;
+      background: #f9fafb;
+      border: 1.5px solid #d1d5db;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 10px;
+    }
+    .link-input-row .pipe { color: #9ca3af; font-weight: 700; }
+
+    /* ===== TABLE ===== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 18px 0;
+    }
+    .data-table th {
+      background: linear-gradient(135deg, #1a3a6b, #2563eb);
+      color: #fff;
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .data-table th:first-child { border-radius: 8px 0 0 0; }
+    .data-table th:last-child { border-radius: 0 8px 0 0; }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e8edf5;
+      vertical-align: top;
+    }
+    .data-table tr:nth-child(even) td { background: #f8fafc; }
+    .data-table tr:hover td { background: #eff6ff; }
+
+    /* ===== FILE FORMAT BADGES ===== */
+    .fmt-badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 1px 2px;
+    }
+    .fmt-pdf { background: #fde8e8; color: #b91c1c; }
+    .fmt-word { background: #dbeafe; color: #1d4ed8; }
+    .fmt-excel { background: #d1fae5; color: #065f46; }
+    .fmt-img { background: #fef9c3; color: #854d0e; }
+    .fmt-other { background: #f3e8ff; color: #6b21a8; }
+
+    /* ===== FAQ ===== */
+    details {
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    details[open] {
+      box-shadow: 0 2px 12px rgba(37,99,235,0.1);
+      border-color: #93c5fd;
+    }
+    summary {
+      padding: 14px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f8fafc;
+      color: #1a3a6b;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: '\25B6';
+      font-size: 10px;
+      color: #2563eb;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+    .faq-answer {
+      padding: 14px 18px 18px 44px;
+      background: #fff;
+      color: #374151;
+      font-size: 14px;
+    }
+    .faq-hy { margin-bottom: 10px; }
+    .faq-ru { color: #555; }
+
+    /* ===== MATERIAL LIST MOCKUP ===== */
+    .material-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .material-item .mat-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .material-item .mat-info { flex: 1; }
+    .material-item .mat-title { font-weight: 600; font-size: 14px; color: #1a3a6b; }
+    .material-item .mat-meta { font-size: 12px; color: #6b7280; }
+    .material-item .mat-actions { display: flex; gap: 8px; }
+    .btn-edit {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #93c5fd;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-delete {
+      background: #fff1f2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ===== METHOD BOXES ===== */
+    .method-box-a {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+      margin: 18px 0;
+    }
+    .method-box-b {
+      background: #f0f5ff;
+      border-left: 4px solid #3b82f6;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+      margin: 18px 0;
+    }
+    .method-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .method-box-a .method-title { color: #15803d; }
+    .method-box-b .method-title { color: #1d4ed8; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #1a3a6b;
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 32px 16px;
+      margin-top: 48px;
+      font-size: 13px;
+    }
+    footer strong { color: #fff; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: #fff; font-size: 13px; }
+      .cover {
+        background: #1a3a6b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        padding: 30px 20px;
+      }
+      .section, .toc {
+        box-shadow: none;
+        border: 1px solid #d1d5db;
+        margin: 16px 0;
+        page-break-inside: avoid;
+      }
+      .mockup { box-shadow: none; }
+      .toc ol { columns: 1; }
+      details { border: 1px solid #d1d5db; }
+      details[open] { box-shadow: none; }
+      footer {
+        background: #1a3a6b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .cover h1 { font-size: 1.5rem; }
+      .cover h1 .ru { font-size: 1.15rem; }
+      .bilingual { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+      .section { padding: 22px 16px 18px; }
+      .toc { padding: 22px 18px; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .cover-meta { gap: 14px; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 8px 8px; }
+      .material-item { flex-wrap: wrap; }
+      .material-item .mat-actions { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<header class="cover">
+  <div class="cover-badge">Ուղեցույց &middot; Руководство</div>
+  <h1>
+    <span class="hy">Ինչպե՞ս հրատարակել նյութ կայքում</span>
+    <span class="ru">Как публиковать материалы на сайте</span>
+  </h1>
+  <p class="cover-sub">Կայքի կառավարման վահանակ &mdash; Панель управления сайтом</p>
+  <div class="cover-meta">
+    <span>&#128197; 2026</span>
+    <span>&#127979; Դպրոց / Школа</span>
+    <span>&#127760; Երկլեզու &middot; Двуязычный</span>
+  </div>
+</header>
+
+<!-- ===== TABLE OF CONTENTS ===== -->
+<nav class="toc container" aria-label="Բովandakoutyun">
+  <h2>Բովandakoutyun / Содержание</h2>
+  <ol>
+    <li><a href="#s1">Ի՞նչ է կառավarman vahanaкы / Что такое панель управления</a></li>
+    <li><a href="#s2">Ինչпes mutq gorcel / Как войти в систему</a></li>
+    <li><a href="#s3">Քayл 1 &mdash; Bazhni ev Ezdji yntrutyun / Выбор раздела и страницы</a></li>
+    <li><a href="#s4">Քayл 2 &mdash; Бованdakoutyuni lracnum / Заполнение содержания</a></li>
+    <li><a href="#s5">Քayл 3 &mdash; Fayler kcel / Прикрепление файлов</a></li>
+    <li><a href="#s6">Pahel ev stugel / Сохранить и проверить</a></li>
+    <li><a href="#s7">Fopel ev jnjel / Редактировать и удалить</a></li>
+    <li><a href="#s8">Fayli jevanagirerы / Форматы файлов</a></li>
+    <li><a href="#s9">Hartsapataskhanner / Часто задаваемые вопросы</a></li>
+  </ol>
+</nav>
+
+<!-- ===== SECTION 1: WHAT IS THE ADMIN PANEL ===== -->
+<article class="section container" id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">
+      <span class="hy">Ի՞նչ է կայqi կaravaрman vahanaкы</span>
+      <span class="ru">Что такое панель управления сайтом</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <p>Кaravaрman vahanaкы mek haskanalik cragir-gorciq e, orы trvum e kаyqum nյuterы kарavelou hamar: Аyntegh nյut herinelu, vercaknel ev jnjelu hamar hatkuk tec-кanoutyoun petk chi:</p>
+      <p>Аnyoqa oune аndzmnayin аnun (username) ev gagtnаber (password): Аyynkerdzyun teghrova, mutq kgoreq vаhanaк ev karogh eq anmijapes sksnel ashkhatankы:</p>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <p>Панель управления — это специальная программа на сайте, которая позволяет добавлять, редактировать и удалять материалы без знания программирования.</p>
+      <p>У каждого сотрудника есть личное имя пользователя (username) и пароль (password). Введя эти данные, вы попадёте в панель и сможете сразу начать работу.</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">&#8505;&#65039;</div>
+    <div class="callout-body">
+      <div class="callout-title">Kаrev Cragrum / Важно знать</div>
+      <p>
+        <strong>Հaу:</strong> Кayqi karavarman vahanaкы mosanalik e aynpisi kompyuterыts, planshеtыts кam hеranakhosыts:<br>
+        <strong>Рус:</strong> Панель управления сайтом доступна с любого устройства: компьютера, планшета или смартфона.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 2: HOW TO LOG IN ===== -->
+<article class="section container" id="s2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">
+      <span class="hy">Ինчпe՞с mutq gorcel vahanaк</span>
+      <span class="ru">Как войти в панель управления</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">Tzervayanum batsek kayqy brauzerum: Hascemi dzevy verdзum greq <strong>/admin</strong>: Orınak. ethe kayqn e <code>school.am</code>, aporsеq <code>school.am/admin</code></div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">Аrдзunki dasht-um greq аndzmnayin аnunы (username):</div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">Yerkordi dasht-um greq gagtnabery (password):</div>
+        </li>
+        <li class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">Sertmekeq <strong>&laquo;Mutq / Войти&raquo;</strong> knopin ev skasel ashkhatanкы:</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">Откройте браузер и перейдите на сайт школы. В конце адреса добавьте <strong>/admin</strong>: Например, если сайт <code>school.am</code>, введите <code>school.am/admin</code></div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">В первом поле введите ваше имя пользователя (username).</div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">Во втором поле введите ваш пароль (password).</div>
+        </li>
+        <li class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">Нажмите кнопку <strong>&laquo;Войти&raquo;</strong> и вы окажетесь в панели управления.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Login form mockup -->
+  <div class="mockup" role="img" aria-label="Moutq vahanaк — ekran nmoush">
+    <div class="mockup-bar">
+      <span class="mockup-dot red"></span>
+      <span class="mockup-dot yellow"></span>
+      <span class="mockup-dot green"></span>
+      <span class="mockup-url">school.am/admin</span>
+    </div>
+    <div class="mockup-body">
+      <div style="max-width:360px;margin:0 auto;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:12px;">&#128274;</div>
+        <h3 style="color:#1a3a6b;margin-bottom:20px;font-size:1.1rem;">Mutq Vahanaк / Вход в систему</h3>
+        <div class="form-row">
+          <label class="form-label">Аndzmnayin аnun (Username)</label>
+          <div class="form-input" style="color:#374151;">anna.grigoryan</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Gagtnaber (Пароль)</label>
+          <div class="form-input" style="letter-spacing:4px;color:#374151;">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
+        </div>
+        <div class="btn-primary" style="width:100%;text-align:center;display:block;padding:12px;">Mutq &middot; Войти</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-icon">&#9888;&#65039;</div>
+    <div class="callout-body">
+      <div class="callout-title">Nkatel / Внимание</div>
+      <p>
+        <strong>Հaу:</strong> Ethe morecel eq gagtnabery, dehepek dprocı hamakargchı аndzin:<br>
+        <strong>Рус:</strong> Если вы забыли пароль, обратитесь к системному администратору школы.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 3: SELECT SECTION AND PAGE ===== -->
+<article class="section container" id="s3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">
+      <span class="hy">Qayl 1 &mdash; Bazhni ev Ezdji yntrutyun</span>
+      <span class="ru">Шаг 1 &mdash; Выберите раздел и страницу</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <p>Nakhevorum petk e haskacnel, te orm bazhnum ev orm ezdzhum petk e herinelu nyutы: Adasardayin teghevoruytyunn apahоvum e yerkou champ yntrutyunov:</p>
+      <ul class="steps" style="margin-top:12px;">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">Yntreq <strong>Bazhın (Раздел)</strong> &mdash; aysinqn saytum mey vaskerakan bardzr кategoria (orınak&colon; &laquo;Usumnaкan gordzntatzyаs&raquo;):</div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">Yntreq <strong>Ezdj (Страница)</strong> &mdash; bazhnı yndhamyunum egаkans ayjntegh khmbagrvox eper кam keteкory:</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <p>Сначала нужно определить, в каком разделе и на какой странице должен появиться материал. Это делается с помощью двух выпадающих списков.</p>
+      <ul class="steps" style="margin-top:12px;">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">Выберите <strong>Раздел (Bazhın)</strong> &mdash; это крупная категория на сайте (например&colon; &laquo;Учебный процесс&raquo;).</div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">Выберите <strong>Страницу (Ezdj)</strong> &mdash; конкретную страницу внутри выбранного раздела.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Dropdown mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <span class="mockup-dot red"></span>
+      <span class="mockup-dot yellow"></span>
+      <span class="mockup-dot green"></span>
+      <span class="mockup-url">school.am/admin &mdash; Nyut avelaцnel</span>
+    </div>
+    <div class="mockup-body">
+      <div class="form-row-2">
+        <div class="form-row">
+          <label class="form-label">Bazhın (Раздел) <span class="req">*</span></label>
+          <div class="form-select" style="border-color:#2563eb;">Usumnaкan gordzntatzyаs &#9660;</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Ezdj (Страница) <span class="req">*</span></label>
+          <div class="form-select">Dasagnacumer... &#9660;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections table -->
+  <h3 style="color:#1a3a6b;margin:24px 0 12px;font-size:1rem;">Bazhınnerы saytum / Все разделы сайта</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Bazhın &mdash; Haykakan / Հayerен</th>
+        <th>Переводнаименование (Русский)</th>
+        <th>Nnkaragrutyun / Описание</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Դпроци mashin</strong></td>
+        <td>О школе</td>
+        <td>Dprocu masin tеghekutyun, patmutyun, karog</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Khоrhurdner</strong></td>
+        <td>Советы</td>
+        <td>Ogtaкar khоrhurdner aкanavornerу patricannery</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Аndzmnakas</strong></td>
+        <td>Персонал</td>
+        <td>Usucichner, vardararer, ashkhatoghner</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Resursner</strong></td>
+        <td>Ресурсы / Здание</td>
+        <td>Shenjanyov, graderannerov, senyakerov kapakzyal</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Usumnaкan gordzntatzyаs</strong></td>
+        <td>Учебный процесс</td>
+        <td>Dasavaraner, dzragrer, kanonakargery</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Kyank</strong></td>
+        <td>Жизнь школы</td>
+        <td>Iradardзutyunner, nkarnery, kyanqi kerdery</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>Ashakertner</strong></td>
+        <td>Ученики</td>
+        <td>Ashakertner, katoghmutyunner, nkargaghutyunner</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>Stegtsagortsutyunner</strong></td>
+        <td>Творчество</td>
+        <td>Arvestner, stegtsagordzutyunner, tsraguytner</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><strong>Mrcuytner</strong></td>
+        <td>Конкурсы</td>
+        <td>Mrcuytner, marzumner, khorhrdarnaker</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td><strong>Кap</strong></td>
+        <td>Контакты</td>
+        <td>Hasgzetavorutyunner, hartsukyanner, grasenyek</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+
+<!-- ===== SECTION 4: FILL IN CONTENT ===== -->
+<article class="section container" id="s4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">
+      <span class="hy">Qayl 2 &mdash; Nyuti bovandastutyuny lracnel</span>
+      <span class="ru">Шаг 2 &mdash; Заполните содержание материала</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Vernagir (Заголовок) *</strong> &mdash; Greq nyuti kanvory, karchrazum ev haskanalik: Orınak&colon; &laquo;Mayisi dproc-hamayaran 2026&raquo;
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Bovandakutyun (Содержание) *</strong> &mdash; Aystegh greq pashtonakan texty: Kareli e nkaragrutyun, kazm, haraberyal teghekutyun кam anvchar texer:
+          </div>
+        </li>
+      </ul>
+      <div class="callout success" style="margin-top:12px;">
+        <div class="callout-icon">&#9989;</div>
+        <div class="callout-body">
+          <div class="callout-title">Lav praktiка / Хорошая практика</div>
+          <p>Vernagiry greq karchrazum ev haskanalik: Lriv nkaragrutyuny greq bovandakutyan dasht-um:</p>
+        </div>
+      </div>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Заголовок (Vernagir) *</strong> &mdash; Введите короткое и понятное название материала. Например&colon; &laquo;Школьный праздник мая 2026&raquo;
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Содержание (Bovandakutyun) *</strong> &mdash; Здесь введите основной текст&colon; описание события, расписание, объявление или любой другой текст.
+          </div>
+        </li>
+      </ul>
+      <div class="callout success" style="margin-top:12px;">
+        <div class="callout-icon">&#9989;</div>
+        <div class="callout-body">
+          <div class="callout-title">Совет</div>
+          <p>Заголовок должен быть коротким и понятным. Подробное описание пишите в поле содержания.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content form mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <span class="mockup-dot red"></span>
+      <span class="mockup-dot yellow"></span>
+      <span class="mockup-dot green"></span>
+      <span class="mockup-url">school.am/admin &mdash; Nyut avelaцnel</span>
+    </div>
+    <div class="mockup-body">
+      <div class="form-row">
+        <label class="form-label">Vernagir &mdash; Заголовок <span class="req">*</span></label>
+        <div class="form-input focus" style="color:#374151;">Mayisi dproc-hamayaran 2026</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Bovandakutyun &mdash; Содержание <span class="req">*</span></label>
+        <div class="form-textarea" style="color:#374151;">Siralikner, sebakan e menk hamayaran, ory katarvel e mayisi 15-in dproci mankaparkum: Mасnaкutyun karogh en bolor ashakertner ev nranc ckanoghner...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">&#128683;</div>
+    <div class="callout-body">
+      <div class="callout-title">Petadzov / Обязательно</div>
+      <p>
+        <strong>Հaу:</strong> Vernagiry ev bovandakutyuny <em>petadzov</em> dashtery en: Ardi pety chi sertmel &laquo;Avelaцnel&raquo; knopin ayn lracnelits aradzh:<br>
+        <strong>Рус:</strong> Поля &laquo;Заголовок&raquo; и &laquo;Содержание&raquo; являются <em>обязательными</em>. Без их заполнения кнопка сохранения не сработает.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 5: ATTACH FILES ===== -->
+<article class="section container" id="s5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">
+      <span class="hy">Qayl 3 &mdash; Fayler kcel</span>
+      <span class="ru">Шаг 3 &mdash; Прикрепление файлов</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <p>Nвagrel karogh eq fayler kcel yerku yeghanaکov: <strong>Yeghanak А</strong> &mdash; bertvel kompyuteryits, <strong>Yeghanak B</strong> &mdash; artakin kap avеlaцnel:</p>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <p>Файлы можно прикрепить двумя способами: <strong>Способ А</strong> &mdash; загрузить с компьютера, <strong>Способ Б</strong> &mdash; добавить внешнюю ссылку.</p>
+    </div>
+  </div>
+
+  <!-- Method A -->
+  <div class="method-box-a">
+    <div class="method-title">&#128190; Yeghanak А / Способ А &mdash; Bertvel kompyuteryits / Загрузить с компьютера</div>
+
+    <div class="bilingual">
+      <div class="lang-hy">
+        <div class="lang-label">Հayerен</div>
+        <ul class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">Gtnеq <strong>&laquo;Kcel fayl&raquo;</strong> dasht-khotumы: Aynte karın e mek yerkangkut maser, otek kareli e kcel fayler:</div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">Tarrik u katrık fayl dashin khotum (drag &amp; drop), kam sertmek dashin ev yntreq fayl papkey:</div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">Fayl mtik gorvac chap kgoi &mdash; kanach vichaky nshum e, vor bertvorumы katarvel e:</div>
+          </li>
+        </ul>
+      </div>
+      <div class="lang-ru">
+        <div class="lang-label">Русский</div>
+        <ul class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">Найдите <strong>область загрузки файла</strong>: Это прямоугольная зона с пунктирной рамкой, куда можно перетаскивать файлы.</div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">Перетащите файл мышью в эту область (drag &amp; drop), или нажмите на неё и выберите файл в папках компьютера.</div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">Когда файл загрузится, появится зелёная галочка &mdash; загрузка прошла успешно.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mockup" style="margin-top:12px;">
+      <div class="mockup-bar">
+        <span class="mockup-dot red"></span>
+        <span class="mockup-dot yellow"></span>
+        <span class="mockup-dot green"></span>
+        <span class="mockup-url">school.am/admin &mdash; Fayl kcel</span>
+      </div>
+      <div class="mockup-body">
+        <div class="dropzone">
+          <span class="dz-icon">&#128194;</span>
+          <strong>Tarrik u katrık fayl aystegh / Перетащите файл сюда</strong><br>
+          <span style="color:#3b82f6;font-size:12px;">&mdash; кam / или &mdash;</span><br>
+          <span style="font-size:12px;color:#2563eb;">&#128433;&#65039; Sertmek dashin &mdash; Нажмите для выбора файла</span>
+        </div>
+        <div style="margin-top:12px;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:10px 14px;font-size:13px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.2rem;">&#9989;</span>
+          <div>
+            <strong style="color:#15803d;">hamayaran_dzragir.pdf</strong>
+            <span style="color:#6b7280;font-size:12px;margin-left:8px;">245 KB &mdash; Bertvorumы katarvel e / Загружен успешно</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Method B -->
+  <div class="method-box-b">
+    <div class="method-title">&#128279; Yeghanak B / Способ Б &mdash; Artakin kap avelaцnel / Добавить внешнюю ссылку</div>
+
+    <div class="bilingual">
+      <div class="lang-hy">
+        <div class="lang-label">Հayerен</div>
+        <p>Ethe fayly ardеn greqvats e Google Drive-um, Dropbox-um кam aylur kayta, kareli e avelaцnel artakin kap: Kapы petk e greq hetos formatu hamar&colon;</p>
+        <div style="font-family:monospace;background:#e0e7ff;padding:10px 14px;border-radius:6px;font-size:13px;margin:10px 0;color:#312e81;">
+          Аnun | https://kap
+        </div>
+        <p style="font-size:13px;"><strong>Orınak&colon;</strong> <code style="background:#e0e7ff;padding:2px 6px;border-radius:3px;font-size:12px;">Hamayaran dzragir | https://drive.google.com/file/d/abc/view</code></p>
+      </div>
+      <div class="lang-ru">
+        <div class="lang-label">Русский</div>
+        <p>Если файл уже сохранён в Google Drive, Dropbox или на другом сайте, можно добавить внешнюю ссылку. Ссылку нужно написать строго в таком формате&colon;</p>
+        <div style="font-family:monospace;background:#dbeafe;padding:10px 14px;border-radius:6px;font-size:13px;margin:10px 0;color:#1e3a8a;">
+          Название | https://ссылка
+        </div>
+        <p style="font-size:13px;"><strong>Пример&colon;</strong> <code style="background:#dbeafe;padding:2px 6px;border-radius:3px;font-size:12px;">Расписание праздника | https://drive.google.com/...</code></p>
+      </div>
+    </div>
+
+    <div class="mockup" style="margin-top:12px;">
+      <div class="mockup-bar">
+        <span class="mockup-dot red"></span>
+        <span class="mockup-dot yellow"></span>
+        <span class="mockup-dot green"></span>
+        <span class="mockup-url">school.am/admin &mdash; Artakin kap</span>
+      </div>
+      <div class="mockup-body">
+        <label class="form-label">Artakin kap / Внешняя ссылка</label>
+        <div class="link-input-row">
+          <span style="color:#374151;">Hamayaran dzragir</span>
+          <span class="pipe">|</span>
+          <span style="color:#2563eb;">https://drive.google.com/file/d/abc123/view</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-top:6px;">Formaty&colon; Аnun | https://... &nbsp;&middot;&nbsp; Формат&colon; Название | https://...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">&#128161;</div>
+    <div class="callout-body">
+      <div class="callout-title">Yeghanakih yntrutyun / Выбор способа</div>
+      <p>
+        <strong>Հaу:</strong> Ethe kcvats fayly sahmanapakum e dprocum, ogtagortzek <em>Yeghanak А</em>: Ethe fayly artakin kayкum e (Google Drive), ogtagortzeq <em>Yeghanak B</em>:<br>
+        <strong>Рус:</strong> Если файл хранится на вашем компьютере, используйте <em>Способ А</em>. Если файл уже в Google Drive или другом облаке, используйте <em>Способ Б</em>.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 6: SAVE AND VERIFY ===== -->
+<article class="section container" id="s6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div class="section-title">
+      <span class="hy">Pahel ev stugel &mdash; &laquo;Avelaцnel nyut&raquo;</span>
+      <span class="ru">Сохранить и проверить результат</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">Bolor dasherы lracnelits hetoi sertmekeq kanach knopin &mdash; <strong>&laquo;Avelaцnel nyut&raquo;</strong>:</div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">Sistemy pataskhanelu e kanach gortsitsuyth (notification) &mdash; &laquo;Nyuty hajoghutyamb avelaцvel e&raquo;:</div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">Nayeq kayqum ayn kоghmy, ortegh avelaцvel e nyuty, ev stugek vor amenashkh e yerevoum bnakichnerу hamar:</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <ul class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">После заполнения всех полей нажмите зелёную кнопку <strong>&laquo;Avelaцnel nyut&raquo;</strong> (Добавить материал).</div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">Система ответит зелёным уведомлением &mdash; &laquo;Материал успешно добавлен&raquo;.</div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">Зайдите на сайт в нужный раздел и убедитесь, что материал правильно отображается для посетителей.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Save button mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <span class="mockup-dot red"></span>
+      <span class="mockup-dot yellow"></span>
+      <span class="mockup-dot green"></span>
+      <span class="mockup-url">school.am/admin</span>
+    </div>
+    <div class="mockup-body" style="text-align:center;">
+      <div class="btn-primary" style="font-size:16px;padding:13px 44px;display:inline-block;">&#10133; Avelaцnel nyut / Добавить материал</div>
+      <div style="margin-top:16px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px 18px;display:inline-block;font-size:13px;color:#15803d;">
+        <strong>&#9989; Nyuty hajoghutyamb avelaцvel e! / Материал успешно добавлен!</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">&#127881;</div>
+    <div class="callout-body">
+      <div class="callout-title">Shnorhavor / Поздравляем!</div>
+      <p>
+        <strong>Հaу:</strong> Hajoghutyamb avelaцrel eq nyuty: Kayqy inqnabarun tpavorel e ev nyuty yerevum e bnakichnerу hamar:<br>
+        <strong>Рус:</strong> Вы успешно добавили материал! Сайт автоматически обновился и материал виден для посетителей.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 7: EDIT AND DELETE ===== -->
+<article class="section container" id="s7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div class="section-title">
+      <span class="hy">Egkayin nyuter fopel ev jnjel</span>
+      <span class="ru">Редактировать и удалить существующие материалы</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <p>Avelaцvats nyutere karogh eq fonоkhel кam jnjel: Admin panel-um karogh eq tesnel avelaцvats nyuteri tsanky:</p>
+      <ul class="steps" style="margin-top:12px;">
+        <li class="step">
+          <div class="step-num">&#9998;</div>
+          <div class="step-body"><strong>Fopel (Редактировать)</strong> &mdash; Sertmekeq &laquo;Fopel&raquo; kapa nyuti koghqum: Bargvei boly dashery ev karogh eq fonokhutyunner karnel: Pahelu hamar nra sertmekeq &laquo;Pahel&raquo; knopin:</div>
+        </li>
+        <li class="step">
+          <div class="step-num">&#128465;</div>
+          <div class="step-body"><strong>Jnjel (Удалить)</strong> &mdash; Sertmekeq &laquo;Jnjel&raquo; knopin: Sistemy kxndrı nakhazgushutyun (kveragir): Hastateq, ev nyuty jnjvum e vercnapes:</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <p>Добавленные материалы можно редактировать или удалять. В панели управления виден список всех материалов.</p>
+      <ul class="steps" style="margin-top:12px;">
+        <li class="step">
+          <div class="step-num">&#9998;</div>
+          <div class="step-body"><strong>Редактировать</strong> &mdash; Нажмите кнопку &laquo;Fopel&raquo; рядом с нужным материалом. Откроется форма с текущими данными. Внесите изменения и нажмите &laquo;Сохранить&raquo;.</div>
+        </li>
+        <li class="step">
+          <div class="step-num">&#128465;</div>
+          <div class="step-body"><strong>Удалить</strong> &mdash; Нажмите кнопку &laquo;Jnjel&raquo;. Система запросит подтверждение во всплывающем окне. Подтвердите &mdash; и материал будет удалён навсегда.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Material list mockup -->
+  <div class="mockup">
+    <div class="mockup-bar">
+      <span class="mockup-dot red"></span>
+      <span class="mockup-dot yellow"></span>
+      <span class="mockup-dot green"></span>
+      <span class="mockup-url">school.am/admin &mdash; Nyuteri tsank</span>
+    </div>
+    <div class="mockup-body">
+      <div class="material-item">
+        <div class="mat-icon">&#128196;</div>
+        <div class="mat-info">
+          <div class="mat-title">Mayisi hamayaran 2026 &mdash; Dzragir</div>
+          <div class="mat-meta">Usumnaкan gordzntatzyаs &middot; 2026-05-10 &middot; 1 fayl</div>
+        </div>
+        <div class="mat-actions">
+          <button class="btn-edit">&#9998; Fopel</button>
+          <button class="btn-delete">&#128465; Jnjel</button>
+        </div>
+      </div>
+      <div class="material-item">
+        <div class="mat-icon">&#128247;</div>
+        <div class="mat-info">
+          <div class="mat-title">Kyanqi nkarnery &mdash; Апрель</div>
+          <div class="mat-meta">Kyank &middot; 2026-04-28 &middot; 3 nkar</div>
+        </div>
+        <div class="mat-actions">
+          <button class="btn-edit">&#9998; Fopel</button>
+          <button class="btn-delete">&#128465; Jnjel</button>
+        </div>
+      </div>
+      <div class="material-item">
+        <div class="mat-icon">&#128202;</div>
+        <div class="mat-info">
+          <div class="mat-title">Ashakertayin hamakarg &mdash; 2025&#8211;2026</div>
+          <div class="mat-meta">Ashakertner &middot; 2026-02-15 &middot; Excel fayl</div>
+        </div>
+        <div class="mat-actions">
+          <button class="btn-edit">&#9998; Fopel</button>
+          <button class="btn-delete">&#128465; Jnjel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">&#9940;</div>
+    <div class="callout-body">
+      <div class="callout-title">Zhnjvaliy / Осторожно при удалении</div>
+      <p>
+        <strong>Հaу:</strong> Jnjumits hetoi nyuty vercnapes vercatsvoum e ev verakangnman haravanutyun chka: Hastatеq verjin angam nakhateq jnjel:<br>
+        <strong>Рус:</strong> После удаления материал исчезает навсегда и восстановить его невозможно. Перед удалением дважды убедитесь, что это правильное решение.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 8: FILE FORMATS ===== -->
+<article class="section container" id="s8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div class="section-title">
+      <span class="hy">Fayli jevanagirerы</span>
+      <span class="ru">Таблица допустимых форматов файлов</span>
+    </div>
+  </div>
+
+  <div class="bilingual">
+    <div class="lang-hy">
+      <div class="lang-label">Հayerен</div>
+      <p>Khndrum enq ogtagortzel aydoqm fayli jevanagirerы, vor khuysy sahmanapaky sistemi hamar ev katchelun karogh e mosanalik kayкum:</p>
+    </div>
+    <div class="lang-ru">
+      <div class="lang-label">Русский</div>
+      <p>Пожалуйста, используйте только перечисленные ниже форматы файлов &mdash; они безопасны для сайта и открываются у посетителей.</p>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Jevanagir / Формат</th>
+        <th>Nkaragrutyun (Հayerен)</th>
+        <th>Описание (Русский)</th>
+        <th>Sahmanaped / Макс. размер</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="fmt-badge fmt-pdf">PDF</span></td>
+        <td>Portativ egjanakner &mdash; dzragrer, hravere, zguyts</td>
+        <td>Документы &mdash; расписания, объявления, инструкции</td>
+        <td>20 МБ</td>
+      </tr>
+      <tr>
+        <td><span class="fmt-badge fmt-word">.DOC</span> <span class="fmt-badge fmt-word">.DOCX</span></td>
+        <td>Microsoft Word &mdash; gravor egjanakner</td>
+        <td>Microsoft Word &mdash; текстовые документы</td>
+        <td>10 МБ</td>
+      </tr>
+      <tr>
+        <td><span class="fmt-badge fmt-excel">.XLS</span> <span class="fmt-badge fmt-excel">.XLSX</span></td>
+        <td>Microsoft Excel &mdash; ashkhatacutyunner, hamakargner</td>
+        <td>Microsoft Excel &mdash; таблицы, расчёты, списки</td>
+        <td>10 МБ</td>
+      </tr>
+      <tr>
+        <td><span class="fmt-badge fmt-img">JPG</span> <span class="fmt-badge fmt-img">PNG</span> <span class="fmt-badge fmt-img">WEBP</span></td>
+        <td>Nkarer &mdash; dprocı, iradardзutyunneri lusankarnerd</td>
+        <td>Изображения &mdash; фото школы, мероприятий</td>
+        <td>5 МБ</td>
+      </tr>
+      <tr>
+        <td><span class="fmt-badge fmt-other">GIF</span></td>
+        <td>Sharzvogh nkarer &mdash; ogtagortzel karchov</td>
+        <td>Анимированные изображения &mdash; использовать редко</td>
+        <td>3 МБ</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warning">
+    <div class="callout-icon">&#9888;&#65039;</div>
+    <div class="callout-body">
+      <div class="callout-title">Anashkhat jevanagirerы / Неподдерживаемые форматы</div>
+      <p>
+        <strong>Հaу:</strong> EXE, ZIP, RAR, MP4 ev aylur fayler <em>chen ashkhatim</em> upload kacelu hamar: Ethe tesanyu ev dzaynoy nуuterе khosr avelaцnel, dehepek hamakargchi:<br>
+        <strong>Рус:</strong> Файлы форматов EXE, ZIP, RAR, MP4 <em>не поддерживаются</em> для загрузки. Если нужно добавить видео или аудио, обратитесь к администратору.
+      </p>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 9: FAQ ===== -->
+<article class="section container" id="s9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div class="section-title">
+      <span class="hy">Hartsapataskhanner (FAQ)</span>
+      <span class="ru">Часто задаваемые вопросы</span>
+    </div>
+  </div>
+
+  <details>
+    <summary>&#10067; Morecel em im gagtnabery &mdash; Я забыл(а) пароль &mdash; inchpi anelу?</summary>
+    <div class="faq-answer">
+      <div class="faq-hy"><strong>Հayerен:</strong> Ethe morecel eq gagtnabery, dehepek dprocı hamakargich аndzın: Gagtnabery <em>mek angam miyain</em> verakangvel kkarogh e hamakargchi kologhmutyamb: Mi probaveq krdel gagtnabery &mdash; sistemy karogh e argelakel mutqы:</div>
+      <div class="faq-ru"><strong>Русский:</strong> Если вы забыли пароль, обратитесь к системному администратору школы. Пароль может быть сброшен <em>только администратором</em>. Не пытайтесь угадать пароль многократно &mdash; система может заблокировать доступ.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#10067; Karogh em yerku fayl avelaцnel mek nyutum? &mdash; Можно ли добавить два файла к одному материалу?</summary>
+    <div class="faq-answer">
+      <div class="faq-hy"><strong>Հayerен:</strong> Ayo, kareli e avelaцnel meks kardinal fayl: Upload dashty yntunumy e mek кax meks fayl: Nmanapes, kareli e artakin kapery avelaцnel mek qani tek, mek кax mek:</div>
+      <div class="faq-ru"><strong>Русский:</strong> Да, можно добавить несколько файлов: загружайте по одному через область загрузки. Аналогично можно добавить несколько внешних ссылок &mdash; каждую на новой строке в формате Название | https://...</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#10067; Nyuty avelaцvets, bayc kayqum chi yerevum &mdash; Добавил(а) материал, но он не отображается?</summary>
+    <div class="faq-answer">
+      <div class="faq-hy"><strong>Հayerен:</strong> Nakhadzev stugek, or sertmеkel eq &laquo;Avelaцnel nyut&raquo; knopin ev kanach notification yelel e: Heteo probovek nayel kayqy mjaparkelin tpavorelu hamar (Ctrl+F5): Ethe dardzum e &mdash; dehepek hamakargchi:</div>
+      <div class="faq-ru"><strong>Русский:</strong> Убедитесь, что нажали кнопку &laquo;Добавить материал&raquo; и появилось зелёное уведомление об успехе. Затем попробуйте обновить страницу сайта принудительно (Ctrl+F5). Если проблема остаётся &mdash; обратитесь к администратору.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#10067; Fayly skhalnatsats e (boro саhмаnа) &mdash; Файл слишком большой, что делать?</summary>
+    <div class="faq-answer">
+      <div class="faq-hy"><strong>Հayerен:</strong> PDF fayle karogh eq sahmanapakhel PDF printer-ov: Nkarnery kareli e fkhel online gorcicknerov: Кam ogtagortzek Yeghanak B &mdash; kcel fayle Google Drive-um ev avelaцnel artakin kap: Artakin kapi hamar shemananaph sahmanap chka:</div>
+      <div class="faq-ru"><strong>Русский:</strong> Попробуйте уменьшить PDF с помощью встроенного принтера (печать в PDF с уменьшением). Изображения можно сжать онлайн-сервисами. Или используйте Способ Б &mdash; загрузите в Google Drive и добавьте ссылку. Ограничений по размеру в этом случае нет.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>&#10067; Kareli e nyuty avelaцnel artakin kompyuterits? &mdash; Можно ли добавить материал с другого компьютера?</summary>
+    <div class="faq-answer">
+      <div class="faq-hy"><strong>Հayerен:</strong> Ayo, admin panel-y mosanalik e aynpisi sарqits кam yehan kayits, ethe ka internety: Bayc nkatel e, vor pashtonakan кam hamakargchakan kompyuter-nerы aveli anvtangun en: Mi mutq gorceq ynamet кam hamadzaynutyan kompyuternerits:</div>
+      <div class="faq-ru"><strong>Русский:</strong> Да, панель управления доступна с любого устройства с интернетом. Однако рекомендуется использовать официальные или доверенные устройства. Не заходите в панель с чужих или общедоступных компьютеров &mdash; это небезопасно.</div>
+    </div>
+  </details>
+
+</article>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div style="font-size:2rem;margin-bottom:12px;">&#127979;</div>
+  <strong>Dproci Kayqi Karavelу Ughecuytс</strong><br>
+  Руководство по управлению сайтом школы
+  <div style="margin-top:16px;font-size:12px;opacity:0.75;">
+    Prastrastyunner ev harcerу hamar dehepek hamakargchi &middot; По вопросам обращайтесь к системному администратору
+  </div>
+  <div style="margin-top:14px;font-size:11px;opacity:0.5;">
+    &copy; 2026 &middot; Ughecuytс prastrastutyunner &middot; Руководство для сотрудников школы
+  </div>
+</footer>
+
+</body>
+</html>
