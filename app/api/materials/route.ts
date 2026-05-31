@@ -44,6 +44,11 @@ export async function DELETE(request: NextRequest) {
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
-  await updateMaterials((entries) => entries.filter((entry) => entry.id !== id));
+  try {
+    await updateMaterials((entries) => entries.filter((entry) => entry.id !== id));
+  } catch (err) {
+    console.error("DELETE /api/materials failed:", err);
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }

@@ -154,13 +154,19 @@ export function AdminPanel() {
 
   async function handleRemove(entry: AdminEntry) {
     if (!window.confirm(s.confirmDelete(entry.title))) return;
-    await deleteEntryFiles(entry.files);
-    const ok = await deleteEntry(entry.id);
-    if (ok) {
-      setEntries((current) => current.filter((item) => item.id !== entry.id));
-      if (editingId === entry.id) resetForm();
-      if (savedEntryId === entry.id) setSavedEntryId(null);
-      setMessage(s.deleted);
+    try {
+      await deleteEntryFiles(entry.files);
+      const ok = await deleteEntry(entry.id);
+      if (ok) {
+        setEntries((current) => current.filter((item) => item.id !== entry.id));
+        if (editingId === entry.id) resetForm();
+        if (savedEntryId === entry.id) setSavedEntryId(null);
+        setMessage(s.deleted);
+      } else {
+        setMessage(s.deleteFailed);
+      }
+    } catch {
+      setMessage(s.deleteFailed);
     }
   }
 

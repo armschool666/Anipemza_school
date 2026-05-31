@@ -35,6 +35,7 @@ export const adminStrings = {
   fillTitleAndBody: "Լրացրեք վերնագիրը և բովանդակությունը։",
   loadFailed: "Չհաջողվեց բեռնել նյութերը։",
   saveFailed: "Չհաջողվեց պահպանել նյութը։",
+  deleteFailed: "Չհաջողվեց ջնջել նյութը։ Փորձեք նորից:",
   saved: "Նյութը պահպանվեց։",
   updated: "Նյութը թարմացվեց։",
   deleted: "Նյութը ջնջվեց։",
