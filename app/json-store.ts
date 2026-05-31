@@ -78,6 +78,7 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
     await put(blobKey, JSON.stringify(value, null, 2), {
       access: "public",
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: "application/json",
     });
   }
