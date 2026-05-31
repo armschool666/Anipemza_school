@@ -62,7 +62,7 @@ export const schoolConfig: SchoolConfig = {
     bboxRadius: 0.02,
   },
   assets: {
-    logo: "/logo.png",
+    logo: "/logo.jpg",
     heroImage: "/school.jpg",
   },
   name: {
