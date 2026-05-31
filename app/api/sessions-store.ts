@@ -1,60 +1,48 @@
-import { createHash, randomBytes } from "node:crypto";
-import { createJsonStore } from "../json-store";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
 /**
- * Хранилище админ-сессий.
+ * Stateless signed-cookie sessions.
  *
- * Cookie клиента — это случайный идентификатор сессии.
- * На диске хранится SHA-256 от идентификатора + срок жизни.
- * Так даже при утечке файла сессий — токены не вытаскиваются.
+ * Token format: `<expiresAt>:<nonce>:<HMAC-SHA256(ADMIN_TOKEN, payload)>`
+ * No server-side storage needed — the signature proves authenticity and
+ * the expiry is embedded in the payload.
  */
-
-type Session = {
-  hash: string;
-  expiresAt: number;
-};
-
-type SessionsFile = {
-  sessions: Session[];
-};
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
-const store = createJsonStore<SessionsFile>("sessions.json", { sessions: [] });
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
+function getKey(): string {
+  const key = process.env.ADMIN_TOKEN;
+  if (!key) throw new Error("ADMIN_TOKEN is not configured");
+  return key;
 }
 
-function isAlive(session: Session, now: number): boolean {
-  return session.expiresAt > now;
+export function createSession(): { token: string; maxAgeSec: number } {
+  const expiresAt = Date.now() + SESSION_TTL_MS;
+  const nonce = randomBytes(16).toString("hex");
+  const payload = `${expiresAt}:${nonce}`;
+  const mac = createHmac("sha256", getKey()).update(payload).digest("hex");
+  return {
+    token: `${payload}:${mac}`,
+    maxAgeSec: Math.floor(SESSION_TTL_MS / 1000),
+  };
 }
 
-export async function createSession(): Promise<{ token: string; maxAgeSec: number }> {
-  const token = randomBytes(32).toString("hex");
-  const hash = hashToken(token);
-  const now = Date.now();
-  const expiresAt = now + SESSION_TTL_MS;
-
-  await store.update((file) => ({
-    sessions: [...file.sessions.filter((s) => isAlive(s, now)), { hash, expiresAt }],
-  }));
-
-  return { token, maxAgeSec: Math.floor(SESSION_TTL_MS / 1000) };
-}
-
-export async function isSessionValid(token: string | undefined): Promise<boolean> {
+export function isSessionValid(token: string | undefined): boolean {
   if (!token) return false;
-  const hash = hashToken(token);
-  const file = await store.read();
-  const now = Date.now();
-  return file.sessions.some((s) => s.hash === hash && isAlive(s, now));
+  const lastColon = token.lastIndexOf(":");
+  if (lastColon === -1) return false;
+  const payload = token.slice(0, lastColon);
+  const mac = token.slice(lastColon + 1);
+  const expectedMac = createHmac("sha256", getKey()).update(payload).digest("hex");
+  try {
+    if (mac.length !== expectedMac.length) return false;
+    if (!timingSafeEqual(Buffer.from(mac, "hex"), Buffer.from(expectedMac, "hex"))) return false;
+  } catch {
+    return false;
+  }
+  const expiresAt = Number(payload.split(":")[0]);
+  return !isNaN(expiresAt) && Date.now() < expiresAt;
 }
 
-export async function revokeSession(token: string | undefined): Promise<void> {
-  if (!token) return;
-  const hash = hashToken(token);
-  await store.update((file) => ({
-    sessions: file.sessions.filter((s) => s.hash !== hash),
-  }));
-}
+// Stateless — logout is handled client-side by clearing the cookie
+export async function revokeSession(_token: string | undefined): Promise<void> {}

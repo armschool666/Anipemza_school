@@ -26,8 +26,8 @@ export async function uploadFiles(files: FileList | null): Promise<UploadFile[]>
 }
 
 export async function deleteUploadedFile(href: string): Promise<void> {
-  if (!href.startsWith("/uploads/")) return;
-  await fetch(`/api/upload?href=${encodeURIComponent(href)}`, { method: "DELETE" });
+  if (!href) return;
+  await fetch(`/api/upload?url=${encodeURIComponent(href)}`, { method: "DELETE" });
 }
 
 export async function saveEntry(

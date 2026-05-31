@@ -1,3 +1,4 @@
+import { del, put } from "@vercel/blob";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
@@ -14,7 +15,6 @@ const ALLOWED_EXTENSIONS = [
   ".txt", ".csv", ".zip",
 ];
 
-// Magic bytes per extension — guards against renamed malicious files
 function hasValidMagicBytes(ext: string, buf: Buffer): boolean {
   switch (ext) {
     case ".pdf":
@@ -35,16 +35,13 @@ function hasValidMagicBytes(ext: string, buf: Buffer): boolean {
     case ".docx":
     case ".xlsx":
     case ".pptx":
-      // Modern Office formats are ZIP archives
       return buf[0] === 0x50 && buf[1] === 0x4b;
     case ".doc":
     case ".xls":
     case ".ppt":
-      // Old Office formats (Compound Document)
       return buf[0] === 0xd0 && buf[1] === 0xcf;
     case ".txt":
     case ".csv":
-      // Plain text — no fixed magic bytes, any content is acceptable
       return true;
     default:
       return false;
@@ -83,39 +80,55 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "File content does not match its extension" }, { status: 400 });
   }
 
+  const fileName = safeFileName(file.name);
+
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`uploads/${fileName}`, buffer, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: file.type || "application/octet-stream",
+    });
+    return NextResponse.json({ name: file.name, href: blob.url, size: file.size });
+  }
+
+  // Local filesystem fallback for development
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   await mkdir(uploadDir, { recursive: true });
-
-  const fileName = safeFileName(file.name);
   await writeFile(path.join(uploadDir, fileName), buffer);
-
-  return NextResponse.json({
-    name: file.name,
-    href: `/uploads/${fileName}`,
-    size: file.size,
-  });
+  return NextResponse.json({ name: file.name, href: `/uploads/${fileName}`, size: file.size });
 }
 
-// DELETE /api/upload?href=/uploads/filename.pdf
 export async function DELETE(request: NextRequest) {
   const authError = await requireAuth();
   if (authError) return authError;
 
-  const href = request.nextUrl.searchParams.get("href");
-  if (!href || !href.startsWith("/uploads/")) {
-    return NextResponse.json({ error: "Invalid href" }, { status: 400 });
+  const url = request.nextUrl.searchParams.get("url");
+  if (!url) {
+    return NextResponse.json({ error: "Missing url" }, { status: 400 });
   }
 
-  const fileName = path.basename(href);
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      await del(url);
+    } catch {
+      // Already deleted or not found — treat as success
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  // Local filesystem fallback for development
+  if (!url.startsWith("/uploads/")) {
+    return NextResponse.json({ error: "Invalid url" }, { status: 400 });
+  }
+  const fileName = path.basename(url);
   if (fileName.includes("..") || fileName.includes("/")) {
     return NextResponse.json({ error: "Invalid filename" }, { status: 400 });
   }
-
   const filePath = path.join(process.cwd(), "public", "uploads", fileName);
   try {
     await unlink(filePath);
   } catch {
-    // File already gone — treat as success
+    // File already gone
   }
   return NextResponse.json({ ok: true });
 }

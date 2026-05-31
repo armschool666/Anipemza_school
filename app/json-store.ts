@@ -1,28 +1,23 @@
+import { list, put } from "@vercel/blob";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
 
-/**
- * Атомарное чтение/запись JSON-файла как единого источника данных.
- *
- * - Запись идёт во временный файл, затем атомарно переименовывается
- *   в целевой → процесс не может оставить файл «полуизменённым».
- * - На уровне модуля держим очередь промисов по пути файла: пока
- *   предыдущая запись/чтение не закончилось, следующая ждёт.
- *   Это спасает от race condition «read-modify-write».
- */
+export interface JsonStore<T> {
+  read(): Promise<T>;
+  write(value: T): Promise<void>;
+  update(mutator: (current: T) => T | Promise<T>): Promise<T>;
+}
+
+// ── Local filesystem (development) ───────────────────────────────────────────
 
 const dataDir = path.join(process.cwd(), "data");
-
 const locks = new Map<string, Promise<unknown>>();
 
 function withLock<T>(filePath: string, task: () => Promise<T>): Promise<T> {
   const previous = locks.get(filePath) ?? Promise.resolve();
   const next = previous.then(task, task);
-  locks.set(
-    filePath,
-    next.catch(() => undefined),
-  );
+  locks.set(filePath, next.catch(() => undefined));
   return next;
 }
 
@@ -33,13 +28,7 @@ async function atomicWrite(filePath: string, contents: string): Promise<void> {
   await rename(tmp, filePath);
 }
 
-export interface JsonStore<T> {
-  read(): Promise<T>;
-  write(value: T): Promise<void>;
-  update(mutator: (current: T) => T | Promise<T>): Promise<T>;
-}
-
-export function createJsonStore<T>(fileName: string, fallback: T): JsonStore<T> {
+function createFsStore<T>(fileName: string, fallback: T): JsonStore<T> {
   const filePath = path.join(dataDir, fileName);
 
   async function readRaw(): Promise<T> {
@@ -66,4 +55,49 @@ export function createJsonStore<T>(fileName: string, fallback: T): JsonStore<T> 
         return next;
       }),
   };
+}
+
+// ── Vercel Blob (production) ─────────────────────────────────────────────────
+
+function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
+  const blobKey = `data/${fileName}`;
+
+  async function readRaw(): Promise<T> {
+    try {
+      const { blobs } = await list({ prefix: blobKey, limit: 1 });
+      if (!blobs[0]) return fallback;
+      const res = await fetch(blobs[0].url, { cache: "no-store" });
+      if (!res.ok) return fallback;
+      return (await res.json()) as T;
+    } catch {
+      return fallback;
+    }
+  }
+
+  async function writeRaw(value: T): Promise<void> {
+    await put(blobKey, JSON.stringify(value, null, 2), {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: "application/json",
+    });
+  }
+
+  return {
+    read: readRaw,
+    write: writeRaw,
+    update: async (mutator) => {
+      const current = await readRaw();
+      const next = await mutator(current);
+      await writeRaw(next);
+      return next;
+    },
+  };
+}
+
+// ── Factory ──────────────────────────────────────────────────────────────────
+
+export function createJsonStore<T>(fileName: string, fallback: T): JsonStore<T> {
+  return process.env.BLOB_READ_WRITE_TOKEN
+    ? createBlobStore(fileName, fallback)
+    : createFsStore(fileName, fallback);
 }
