@@ -26,11 +26,15 @@ export default async function ChildSectionPage({
     notFound();
   }
 
+  const noImage = ["learning", "events", "students", "creativity", "competitions"].includes(slug);
+
   return (
     <SiteShell>
-      <section className="subhero">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={section.image} alt={page.title} loading="lazy" />
+      <section className={noImage ? "subhero subhero--compact" : "subhero"}>
+        {!noImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={section.image} alt={page.title} loading="lazy" />
+        )}
         <div>
           <Link href={`/section/${section.slug}`}>{section.title}</Link>
           <h1>{page.title}</h1>
