@@ -1,4 +1,5 @@
-import { list, put } from "@vercel/blob";
+import { BlobNotFoundError, head, put } from "@vercel/blob";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
@@ -61,18 +62,28 @@ function createFsStore<T>(fileName: string, fallback: T): JsonStore<T> {
 
 function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
   const blobKey = `data/${fileName}`;
+  const cacheTag = `blob-json:${blobKey}`;
 
   async function readRaw(): Promise<T> {
     try {
-      const { blobs } = await list({ prefix: blobKey, limit: 1 });
-      if (!blobs[0]) return fallback;
-      const res = await fetch(blobs[0].url, { cache: "no-store" });
-      if (!res.ok) return fallback;
+      const blob = await head(blobKey);
+      const url = new URL(blob.url);
+      url.searchParams.set("v", blob.etag);
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error(`Failed to read ${blobKey}: ${res.status}`);
+      }
       return (await res.json()) as T;
-    } catch {
-      return fallback;
+    } catch (error) {
+      if (error instanceof BlobNotFoundError) return fallback;
+      throw error;
     }
   }
+
+  const readCached = unstable_cache(readRaw, ["blob-json", blobKey], {
+    tags: [cacheTag],
+    revalidate: 86400,
+  });
 
   async function writeRaw(value: T): Promise<void> {
     await put(blobKey, JSON.stringify(value, null, 2), {
@@ -81,13 +92,14 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
       allowOverwrite: true,
       contentType: "application/json",
     });
+    revalidateTag(cacheTag, { expire: 0 });
   }
 
   return {
-    read: readRaw,
+    read: readCached,
     write: writeRaw,
     update: async (mutator) => {
-      const current = await readRaw();
+      const current = await readCached();
       const next = await mutator(current);
       await writeRaw(next);
       return next;
