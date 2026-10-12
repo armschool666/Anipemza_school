@@ -85,6 +85,15 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
     revalidate: 86400,
   });
 
+  async function readSafe(): Promise<T> {
+    try {
+      return await readCached();
+    } catch (error) {
+      console.error(`Failed to read ${blobKey}; using the local fallback.`, error);
+      return fallback;
+    }
+  }
+
   async function writeRaw(value: T): Promise<void> {
     await put(blobKey, JSON.stringify(value, null, 2), {
       access: "public",
@@ -96,10 +105,11 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
   }
 
   return {
-    read: readCached,
+    read: readSafe,
     write: writeRaw,
     update: async (mutator) => {
-      const current = await readCached();
+      // Never overwrite live data with an empty fallback during a Blob outage.
+      const current = await readRaw();
       const next = await mutator(current);
       await writeRaw(next);
       return next;
