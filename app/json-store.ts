@@ -1,8 +1,8 @@
-import { BlobNotFoundError, head, put } from "@vercel/blob";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
+import { getContentBucket } from "./cloudflare-r2";
 
 export interface JsonStore<T> {
   read(): Promise<T>;
@@ -58,6 +58,41 @@ function createFsStore<T>(fileName: string, fallback: T): JsonStore<T> {
   };
 }
 
+// ── Cloudflare R2 (production on Workers) ───────────────────────────────────
+
+function createR2Store<T>(fileName: string, fallback: T): JsonStore<T> {
+  const objectKey = `data/${fileName}`;
+  const lockKey = `r2:${objectKey}`;
+
+  async function readRaw(): Promise<T> {
+    const bucket = getContentBucket();
+    if (!bucket) throw new Error("MATERIALS_BUCKET is not configured");
+    const object = await bucket.get(objectKey);
+    if (!object) return fallback;
+    return JSON.parse(await object.text()) as T;
+  }
+
+  async function writeRaw(value: T): Promise<void> {
+    const bucket = getContentBucket();
+    if (!bucket) throw new Error("MATERIALS_BUCKET is not configured");
+    await bucket.put(objectKey, JSON.stringify(value, null, 2), {
+      httpMetadata: { contentType: "application/json; charset=utf-8" },
+    });
+  }
+
+  return {
+    read: () => withLock(lockKey, readRaw),
+    write: (value) => withLock(lockKey, () => writeRaw(value)),
+    update: (mutator) =>
+      withLock(lockKey, async () => {
+        const current = await readRaw();
+        const next = await mutator(current);
+        await writeRaw(next);
+        return next;
+      }),
+  };
+}
+
 // ── Vercel Blob (production) ─────────────────────────────────────────────────
 
 function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
@@ -65,6 +100,7 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
   const cacheTag = `blob-json:${blobKey}`;
 
   async function readRaw(): Promise<T> {
+    const { BlobNotFoundError, head } = await import("@vercel/blob");
     try {
       const blob = await head(blobKey);
       const url = new URL(blob.url);
@@ -95,6 +131,7 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
   }
 
   async function writeRaw(value: T): Promise<void> {
+    const { put } = await import("@vercel/blob");
     await put(blobKey, JSON.stringify(value, null, 2), {
       access: "public",
       addRandomSuffix: false,
@@ -120,7 +157,15 @@ function createBlobStore<T>(fileName: string, fallback: T): JsonStore<T> {
 // ── Factory ──────────────────────────────────────────────────────────────────
 
 export function createJsonStore<T>(fileName: string, fallback: T): JsonStore<T> {
-  return process.env.BLOB_READ_WRITE_TOKEN
+  const r2Store = createR2Store(fileName, fallback);
+  const fallbackStore = process.env.BLOB_READ_WRITE_TOKEN
     ? createBlobStore(fileName, fallback)
     : createFsStore(fileName, fallback);
+
+  const selectStore = () => (getContentBucket() ? r2Store : fallbackStore);
+  return {
+    read: () => selectStore().read(),
+    write: (value) => selectStore().write(value),
+    update: (mutator) => selectStore().update(mutator),
+  };
 }
